@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,12 +26,19 @@ require('./config/passport')(passport); // pass passport for configuration
 // set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
-app.use(bodyParser()); // get information from html forms
+app.use(express.static(path.join(__dirname, 'public'))); // managing static files
+app.use(express.urlencoded({ extended: true })); // get information from html forms
 
 app.set('view engine', 'pug'); // set up pug for templating
 
 // required for passport
-app.use(session({ secret: process.env.SECRET_KEY })); // session secret
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: false,
+  })
+); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
