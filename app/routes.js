@@ -12,6 +12,10 @@ module.exports = function(app, passport) {
   // HOME PAGE (with login links) ========
   // =====================================
   app.get('/', function(req, res) {
+    console.log(req.user);
+    if (req.user && req.user.local.role === 'employee') {
+      console.log('Сотрудник');
+    }
     res.render('index.pug'); // load the index.pug file
   });
 
