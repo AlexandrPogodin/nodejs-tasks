@@ -5,7 +5,7 @@ block content
     .col-sm-6.col-sm-offset-3
       h1
         span.fa.fa-sign-in
-        |  Login
+        |  Авторизация
       // show any messages that come back with authentication
       - if (message.length > 0)
         .alert.alert-danger 
@@ -13,17 +13,17 @@ block content
       // LOGIN FORM
       form(action='/login', method='post')
         .form-group
-          label Email
-          input.form-control(type='email', name='email')
+          label Ваш email*
+          input.form-control(type='email', name='email', required='')
         .form-group
-          label Password
-          input.form-control(type='password', name='password')
-        button.btn.btn-outline-primary(type='submit') Login
+          label Ваш пароль*
+          input.form-control(type='password', name='password', required='')
+        button.btn.btn-outline-primary(type='submit') Войти
       hr
       p
-        | Need an account? 
-        a(href='/signup') Signup
+        | Нет аккаунта? 
+        a(href='/signup') Зарегистрироваться
       p
-        | Or go 
-        a(href='/') home
+        | Вернуться 
+        a(href='/') назад
         | .

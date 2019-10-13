@@ -3,26 +3,20 @@ extends layout.pug
 block content
   .container
     .page-header.text-center
-      h1
-        span.fa.fa-anchor
-        |  Profile Page
-      a.btn.btn-outline-primary.btn-sm(href='/logout') Logout
-    .row
-      // LOCAL INFORMATION
+      h1 Профиль
+    .row.mt-3.justify-content-center
       .col-sm-6
-        .well
+        .card.p-3
           h3
             span.fa.fa-user
-            |  Local
+            | 
+            = user.local.name
           p
             strong id: 
             = user._id
             br
-            strong email: 
+            strong Email: 
             = user.local.email
             br
-            strong password: 
-            = user.local.password
-            br
-            strong role: 
-            = user.local.role
+            strong Статус персонала: 
+            = user.local.admin

@@ -4,19 +4,15 @@ function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
 
   // if they aren't redirect them to the home page
-  res.redirect('/');
+  res.redirect('/login');
 }
 
 module.exports = function(app, passport) {
   // =====================================
   // HOME PAGE (with login links) ========
   // =====================================
-  app.get('/', function(req, res) {
-    console.log(req.user);
-    if (req.user && req.user.local.role === 'employee') {
-      console.log('Сотрудник');
-    }
-    res.render('index.pug'); // load the index.pug file
+  app.get('/', isLoggedIn, function(req, res) {
+    res.render('index.pug', { user: req.user }); // load the index.pug file
   });
 
   // =====================================
@@ -51,7 +47,7 @@ module.exports = function(app, passport) {
   app.post(
     '/signup',
     passport.authenticate('local-signup', {
-      successRedirect: '/profile', // redirect to the secure profile section
+      successRedirect: '/', // redirect to the secure main page
       failureRedirect: '/signup', // redirect back to the signup page if there is an error
       failureFlash: true, // allow flash messages
     })

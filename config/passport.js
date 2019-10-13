@@ -37,7 +37,7 @@ module.exports = function(passport) {
         // by default, local strategy uses username and password, we will override with email
         usernameField: 'email',
         passwordField: 'password',
-        passReqToCallback: true, // allows us to pass back the entire request to the callback
+        passReqToCallback: true // allows us to pass back the entire request to the callback
       },
       function(req, email, password, done) {
         // asynchronous
@@ -54,7 +54,7 @@ module.exports = function(passport) {
               return done(
                 null,
                 false,
-                req.flash('signupMessage', 'That email is already taken.')
+                req.flash('signupMessage', 'Данный email уже используется.')
               );
             }
             // if there is no user with that email
@@ -62,6 +62,7 @@ module.exports = function(passport) {
             const newUser = new User();
 
             // set the user's local credentials
+            newUser.local.name = req.body.name;
             newUser.local.email = email;
             newUser.local.password = newUser.generateHash(password);
 
@@ -89,7 +90,7 @@ module.exports = function(passport) {
         // by default, local strategy uses username and password, we will override with email
         usernameField: 'email',
         passwordField: 'password',
-        passReqToCallback: true, // allows us to pass back the entire request to the callback
+        passReqToCallback: true // allows us to pass back the entire request to the callback
       },
       function(req, email, password, done) {
         // callback with email and password from our form
@@ -105,7 +106,7 @@ module.exports = function(passport) {
             return done(
               null,
               false,
-              req.flash('loginMessage', 'No user found.')
+              req.flash('loginMessage', 'Сотрудник не найден.')
             ); // req.flash is the way to set flashdata using connect-flash
 
           // if the user is found but the password is wrong
@@ -113,7 +114,7 @@ module.exports = function(passport) {
             return done(
               null,
               false,
-              req.flash('loginMessage', 'Oops! Wrong password.')
+              req.flash('loginMessage', 'Упс. Пароль неверный.')
             ); // create the loginMessage and save it to session as flashdata
 
           // all is well, return successful user
