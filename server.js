@@ -7,6 +7,7 @@ const port = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('connect-flash');
+const favicon = require('serve-favicon');
 
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -26,6 +27,7 @@ require('./config/passport')(passport); // pass passport for configuration
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(express.static(path.join(__dirname, 'public'))); // managing static files
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico'))); // favicon serving
 app.use(express.urlencoded({ extended: true })); // get information from html forms
 
 app.set('view engine', 'pug'); // set up pug for templating
