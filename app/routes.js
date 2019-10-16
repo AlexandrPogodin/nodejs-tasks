@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const Task = require('./models/task.js');
+
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on
@@ -12,6 +15,10 @@ module.exports = function(app, passport) {
   // HOME PAGE (with login links) ========
   // =====================================
   app.get('/', isLoggedIn, function(req, res) {
+    Task.find({ doer: req.user.local._id }, function(err, tasks) {
+      if (err) console.log(err);
+      return tasks;
+    });
     res.render('index.pug', { user: req.user }); // load the index.pug file
   });
 
