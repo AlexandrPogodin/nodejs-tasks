@@ -1,9 +1,24 @@
 extends layout.pug
 
 block content
-  .container.text-center.mt-3
-    - if (!user)
-      h2 Войдите, чтобы использовать приложение
-    - else
-      h2 Здравствуйте, 
-        = user.local.name
+  .container.mt-3
+    h2.greeting-title.text-center.mt-2
+      | Здравствуйте, 
+      = user.local.name
+    .row.mt-5
+      .col-6.mx-auto
+        h4.date.text-secondary
+          = date
+        h2.date-title
+          | Сегодня
+        .tasks
+          - if (tasks.length === 0)
+            p.text-center.text-secondary.font-weight-light
+              | У вас нет заданий.
+          - else
+            .task.shadow-sm.rounded.text-center
+              | Задание 1
+            .task.shadow-sm.rounded.text-center
+              | Задание 2
+            .task.shadow-sm.rounded.text-center
+              = tasks

@@ -2,21 +2,39 @@ extends layout.pug
 
 block content
   .container
-    .page-header.text-center
-      h1 Профиль
-    .row.mt-3.justify-content-center
-      .col-sm-6
-        .card.p-3
-          h3
-            span.fa.fa-user
-            | 
-            = user.local.name
-          p
-            strong id: 
-            = user._id
-            br
-            strong Email: 
-            = user.local.email
-            br
-            strong Статус персонала: 
-            = user.local.admin
+    - if (!user.local.admin)
+      .page-header.text-center
+        h1 Профиль
+      .row.mt-3.justify-content-center
+        .col-sm-6
+          .card.p-3
+            h3
+              span.fa.fa-user
+              | 
+              = user.local.name
+            p
+              strong id: 
+              = user._id
+              br
+              strong Email: 
+              = user.local.email
+              br
+              strong Статус персонала: 
+              = user.local.admin
+    - else 
+      .page-header.text-center
+        h1 Панель управления
+      h2.greeting-title.mt-3
+        | Здравствуйте, 
+        = user.local.name
+      .users-list
+        h3
+          | Список сотрудников:
+        ul
+          each item in users
+            li
+              = item.local.name
+              | 
+              | (
+              = item.local.email
+              | )

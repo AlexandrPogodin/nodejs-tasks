@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
+const Intl = require('intl');
 const Task = require('./models/task.js');
+const User = require('./models/user');
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
@@ -10,21 +12,31 @@ function isLoggedIn(req, res, next) {
   res.redirect('/login');
 }
 
+function getDate() {
+  const d = new Date();
+  const formatter = new Intl.DateTimeFormat('ru', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+  return formatter.format(d);
+}
+
 module.exports = function(app, passport) {
-  // =====================================
-  // HOME PAGE (with login links) ========
-  // =====================================
-  app.get('/', isLoggedIn, function(req, res) {
-    Task.find({ doer: req.user.local._id }, function(err, tasks) {
+  app.get('/', isLoggedIn, async function(req, res) {
+    const tasks = await Task.find({ doer: req.user.local._id }, function(
+      err,
+      docs
+    ) {
       if (err) console.log(err);
-      return tasks;
+      return docs;
     });
-    res.render('index.pug', { user: req.user }); // load the index.pug file
+    const date = getDate();
+    console.log(tasks);
+    res.render('index.pug', { user: req.user, date, tasks });
   });
 
-  // =====================================
-  // LOGIN ===============================
-  // =====================================
   // show the login form
   app.get('/login', function(req, res) {
     // render the page and pass in any flash data if it exists
@@ -41,9 +53,6 @@ module.exports = function(app, passport) {
     })
   );
 
-  // =====================================
-  // SIGNUP ==============================
-  // =====================================
   // show the signup form
   app.get('/signup', function(req, res) {
     // render the page and pass in any flash data if it exists
@@ -60,20 +69,16 @@ module.exports = function(app, passport) {
     })
   );
 
-  // =====================================
-  // PROFILE SECTION =====================
-  // =====================================
-  // we will want this protected so you have to be logged in to visit
-  // we will use route middleware to verify this (the isLoggedIn function)
-  app.get('/profile', isLoggedIn, function(req, res) {
-    res.render('profile.pug', {
-      user: req.user, // get the user out of session and pass to template
+  // profile
+  app.get('/profile', isLoggedIn, async function(req, res) {
+    const users = await User.find({}, function(err, docs) {
+      if (err) console.log(err);
+      return docs;
     });
+    res.render('profile.pug', { user: req.user, users });
   });
 
-  // =====================================
-  // LOGOUT ==============================
-  // =====================================
+  // logout
   app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');

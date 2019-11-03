@@ -4,7 +4,6 @@ block content
   .container
     .col-sm-6.col-sm-offset-3
       h1
-        span.fa.fa-sign-in
         |  Регистрация
       // show any messages that come back with authentication
       - if (message.length > 0)
@@ -24,9 +23,9 @@ block content
         button.btn.btn-outline-primary(type='submit') Зарегистрироваться
       hr
       p
-        | Already have an account? 
-        a(href='/login') Login
+        | Уже зарегистрированы? 
+        a(href='/login') Авторизация
       p
-        | Or go 
-        a(href='/') home
+        | Вернуться 
+        a(href='/') назад
         | .

@@ -1,3 +1,32 @@
 body {
+  font-family: "Roboto", sans-serif;
   word-wrap: break-word;
+}
+
+.greeting-title {
+  font-weight: 100;
+}
+
+.date {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.date-title {
+  font-weight: 700;
+}
+
+.tasks {
+  margin-top: 4rem;
+}
+
+.task {
+  margin: 1rem 0;
+  padding: 1rem 0.7rem;
+  cursor: pointer;
+  transition-duration: 0.5s;
+}
+
+.task:hover {
+  background: #fafafa;
 }
