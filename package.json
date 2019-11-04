@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "serve": "node server.js",
+    "prod": "node server.js",
     "dev": "nodemon server.js"
   },
   "repository": {
