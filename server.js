@@ -24,7 +24,9 @@ mongoose.connect(configDB.url, {
 require('./config/passport')(passport); // pass passport for configuration
 
 // set up our express application
-app.use(morgan('dev')); // log every request to the console
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev')); // log every request to the console
+}
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(express.static(path.join(__dirname, 'public'))); // managing static files
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico'))); // favicon serving
