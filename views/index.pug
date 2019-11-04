@@ -2,23 +2,30 @@ extends layout.pug
 
 block content
   .container.mt-3
-    h2.greeting-title.text-center.mt-2
-      | Здравствуйте, 
-      = user.local.name
-    .row.mt-5
-      .col-6.mx-auto
+    .row.header
+      .col-6.text-left
         h4.date.text-secondary
           = date
         h2.date-title
           | Сегодня
+      .col-6.text-right.user
+        a.btn.btn-outline-dark.rounded-pill(href='/profile', title='Зайти в профиль')= user.local.email
+    hr
+    .row.mt-5
+      .col-6.mx-auto
         .tasks
           - if (tasks.length === 0)
             p.text-center.text-secondary.font-weight-light
               | У вас нет заданий.
           - else
-            .task.shadow-sm.rounded.text-center
-              | Задание 1
-            .task.shadow-sm.rounded.text-center
-              | Задание 2
-            .task.shadow-sm.rounded.text-center
-              = tasks
+            each task in tasks
+              .task.shadow-sm.rounded(class= task.done ? "done" : undefined)
+                p.task-obj=task.objective
+                p.task-desc=task.description
+                p.task-date
+                  = `${task.createdAt.getDate()}/${task.createdAt.getMonth()}/${task.createdAt.getFullYear()}`
+                .row
+                  .col-6.text-left
+                    form(action="/done",method="post")
+                      input(type="hidden", name="taskId", value=`${task._id}`)
+                      button.done-btn(type='submit') Отметить

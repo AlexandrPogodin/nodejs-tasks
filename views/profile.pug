@@ -1,40 +1,37 @@
 extends layout.pug
 
 block content
-  .container
-    - if (!user.local.admin)
-      .page-header.text-center
-        h1 Профиль
-      .row.mt-3.justify-content-center
-        .col-sm-6
-          .card.p-3
-            h3
-              span.fa.fa-user
-              | 
-              = user.local.name
-            p
-              strong id: 
-              = user._id
-              br
-              strong Email: 
-              = user.local.email
-              br
-              strong Статус персонала: 
-              = user.local.admin
-    - else 
-      .page-header.text-center
-        h1 Панель управления
-      h2.greeting-title.mt-3
-        | Здравствуйте, 
-        = user.local.name
-      .users-list
-        h3
-          | Список сотрудников:
-        ul
-          each item in users
-            li
-              = item.local.name
-              | 
-              | (
-              = item.local.email
-              | )
+  .container.mt-3
+    .row.header
+      .col-6.text-left
+        h4.date.text-secondary
+          = date
+        h2.date-title
+          | Профиль
+      .col-6.text-right.user
+        a.btn.btn-outline-danger.rounded-pill(href='/logout', title='Выйти из аккаунта') Выйти
+    hr
+    .row.mt-5
+      .col-6
+        h3.text-center.title-light Учетная запись
+        p
+          b Имя: 
+          = user.local.name
+        p
+          b Почта: 
+          = user.local.email
+        p
+          b Статус администратора: 
+          = user.local.admin
+      - if (user.local.admin)
+        .col-6
+          h3.text-center.title-light Сотрудники
+          .users
+            each item in users
+              a.user-link(href=`/profile/${item._id}`)
+                .user-item.shadow-sm.rounded.text-center
+                  = item.local.name
+                  | 
+                  | (
+                  = item.local.email
+                  | )

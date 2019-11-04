@@ -12,6 +12,11 @@ function isLoggedIn(req, res, next) {
   res.redirect('/login');
 }
 
+function isAdmin(req, res, next) {
+  if (req.user.local.admin) return next();
+  res.redirect('/');
+}
+
 function getDate() {
   const d = new Date();
   const formatter = new Intl.DateTimeFormat('ru', {
@@ -25,15 +30,16 @@ function getDate() {
 
 module.exports = function(app, passport) {
   app.get('/', isLoggedIn, async function(req, res) {
-    const tasks = await Task.find({ doer: req.user.local._id }, function(
-      err,
-      docs
-    ) {
-      if (err) console.log(err);
-      return docs;
-    });
+    const tasks = await Task.find(
+      {
+        doer: req.user._id,
+      },
+      function(err, docs) {
+        if (err) console.log(err);
+        return docs;
+      }
+    );
     const date = getDate();
-    console.log(tasks);
     res.render('index.pug', { user: req.user, date, tasks });
   });
 
@@ -75,12 +81,80 @@ module.exports = function(app, passport) {
       if (err) console.log(err);
       return docs;
     });
-    res.render('profile.pug', { user: req.user, users });
+    const date = getDate();
+    res.render('profile.pug', { user: req.user, users, date });
   });
 
   // logout
   app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
+  });
+
+  app.get('/profile/:userId', isLoggedIn, isAdmin, async function(req, res) {
+    const tasks = await Task.find(
+      {
+        doer: req.params.userId,
+      },
+      function(err, docs) {
+        if (err) console.log(err);
+        return docs;
+      }
+    );
+    const currentUser = await User.find(
+      {
+        _id: req.params.userId,
+      },
+      function(err, docs) {
+        if (err) console.log(err);
+        return docs;
+      }
+    );
+    const date = getDate();
+    res.render('user.pug', {
+      user: req.user,
+      tasks,
+      date,
+      currentUser: currentUser[0],
+    });
+  });
+
+  app.post('/profile/:userId', isLoggedIn, isAdmin, async function(req, res) {
+    const task = new Task({
+      objective: req.body.objective,
+      description: req.body.description,
+      doer: req.body.userId,
+    });
+
+    task.save(function(err) {
+      if (err) return console.log(err);
+      console.log('Задача успешно добавлена. Задача: ', task);
+    });
+    res.redirect(`/profile/${req.params.userId}`);
+  });
+
+  app.post('/done', isLoggedIn, async function(req, res) {
+    const backURL = req.header('Referer') || '/';
+    const { taskId } = req.body;
+    const task = await Task.findById(taskId, function(err, doc) {
+      if (err) console.log(err);
+      return doc;
+    });
+    task.done = !task.done;
+    task.save(function(err) {
+      if (err) return console.log(err);
+      console.log('Отмечено успешно');
+    });
+    res.redirect(backURL);
+  });
+
+  app.post('/del', isLoggedIn, isAdmin, function(req, res) {
+    const backURL = req.header('Referer') || '/';
+    const { taskId } = req.body;
+    Task.findByIdAndRemove(taskId, function(err, doc) {
+      if (err) return console.log(err);
+      console.log('Удалена задача ', doc);
+    });
+    res.redirect(backURL);
   });
 };

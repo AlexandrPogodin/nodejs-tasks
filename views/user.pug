@@ -1,0 +1,46 @@
+extends layout.pug
+
+block content
+  .container.mt-3
+    .row.header
+      .col-6.text-left
+        h4.date.text-secondary
+          = currentUser.local.email
+        h2.date-title
+          = currentUser.local.name
+      .col-6.text-right.user
+        a.btn.btn-outline-dark.rounded-pill(href=`mailto:${currentUser.local.email}`) 
+          | Написать сотруднику
+    hr
+    .row.mt-5
+      .col-6.mx-auto
+        .tasks
+          - if (tasks.length === 0)
+            p.text-center.text-secondary.font-weight-light
+              | У сотрудника нет заданий.
+          - else
+            each task in tasks
+              .task.shadow-sm.rounded(class= task.done ? "done" : undefined)
+                p.task-obj=task.objective
+                p.task-desc=task.description
+                p.task-date
+                  = `${task.createdAt.getDate()}/${task.createdAt.getMonth()}/${task.createdAt.getFullYear()}`
+                .row
+                  .col-6.text-left
+                    form(action="/done",method="post")
+                      input(type="hidden", name="taskId", value=`${task._id}`)
+                      button.done-btn(type='submit') Отметить
+                  .col-6.text-right
+                    form(action="/del",method="post")
+                      input(type="hidden", name="taskId", value=`${task._id}`)
+                      button.delete-btn(type='submit') Удалить
+                //- a.done-btn(href=`/tasks/${task._id}?_method=PUT`) Отметить
+                //- a.delete-btn(href=`/tasks/${task._id}?_method=DELETE`) Удалить
+          .form-task.text-center
+            form(action="", method="post")
+              input.form-control(type="text", name="objective", placeholder="Задача" required)
+              br
+              input.form-control(type="text", name="description", placeholder="Описание")
+              br
+              input(type="hidden", name="userId", value=`${currentUser._id}`)
+              button.btn.btn-outline-dark(type='submit') Добавить

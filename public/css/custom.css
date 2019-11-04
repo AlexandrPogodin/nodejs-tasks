@@ -3,8 +3,26 @@ body {
   word-wrap: break-word;
 }
 
-.greeting-title {
-  font-weight: 100;
+.nav-logo {
+  font-size: 2rem;
+  text-decoration: none !important;
+  color: #e0e0e0;
+  font-weight: 300;
+  transition-duration: 0.5s;
+}
+
+.nav-logo:hover {
+  color: #212121;
+}
+
+.header {
+  min-height: 80px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .date {
@@ -20,13 +38,120 @@ body {
   margin-top: 4rem;
 }
 
+.users {
+  margin-top: 4rem;
+}
+
 .task {
+  text-decoration: none;
+  margin: 1rem 0;
+  padding: 1rem 0.7rem;
+  /* cursor: pointer; */
+  transition-duration: 0.5s;
+}
+
+.task:hover {
+  background: #fafafa;
+}
+
+.task-obj {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.task-desc {
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+.task-date {
+  text-decoration: none !important;
+  font-size: 0.7rem;
+  font-weight: 300;
+  color: #9e9e9e;
+}
+
+.btn {
+  transition-duration: 0.3s;
+}
+
+.delete-btn {
+  border: none;
+  background-color: transparent;
+  display: inline-block !important;
+  text-decoration: none !important;
+  color: #f44336;
+  transition-duration: 0.3s;
+}
+
+.delete-btn:hover {
+  color: #b71c1c;
+}
+
+.done-btn {
+  border: none;
+  background-color: transparent;
+  display: inline-block !important;
+  text-decoration: none !important;
+  color: #009688;
+  transition-duration: 0.3s;
+}
+
+.done-btn:hover {
+  color: #004d40;
+}
+
+.done {
+  opacity: 0.5;
+}
+
+.done .task-obj {
+  text-decoration: line-through;
+}
+
+.done .task-desc {
+  text-decoration: line-through;
+}
+
+.user-item {
+  text-decoration: none !important;
   margin: 1rem 0;
   padding: 1rem 0.7rem;
   cursor: pointer;
   transition-duration: 0.5s;
 }
 
-.task:hover {
+.user-item:hover {
   background: #fafafa;
+}
+
+.user-link {
+  text-decoration: none !important;
+  color: #212121 !important;
+}
+
+.title-light {
+  font-weight: 300;
+}
+
+.profile-card {
+  padding: 1rem;
+}
+
+.form-task {
+  margin-top: 3rem;
+}
+
+.footer {
+  margin-top: 5%;
+}
+
+.social-link {
+  color: #e0e0e0;
+  text-decoration: none !important;
+  transition-duration: 0.3s;
+}
+
+.social-link:hover {
+  color: #212121;
 }
