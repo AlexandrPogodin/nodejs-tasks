@@ -19,13 +19,37 @@ function isAdmin(req, res, next) {
 
 function getDate() {
   const d = new Date();
-  const formatter = new Intl.DateTimeFormat('ru', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-  return formatter.format(d);
+  // const formatter = new Intl.DateTimeFormat('ru', {
+  //   weekday: 'long',
+  //   year: 'numeric',
+  //   month: 'long',
+  //   day: 'numeric',
+  // });
+  // return formatter.format(d);
+  const DAY = [
+    'воскресенье',
+    'понедельник',
+    'вторник',
+    'среда',
+    'четверг',
+    'пятница',
+    'суббота',
+  ];
+  const MONTH = [
+    'января',
+    'февраля',
+    'марта',
+    'апреля',
+    'мая',
+    'июня',
+    'июля',
+    'августа',
+    'сентября',
+    'октября',
+    'ноября',
+    'декабря',
+  ];
+  return `${DAY[d.getDay()]}, ${d.getDate()} ${MONTH[d.getMonth()]}`;
 }
 
 module.exports = function(app, passport) {

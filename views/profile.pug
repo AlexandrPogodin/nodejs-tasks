@@ -3,16 +3,16 @@ extends layout.pug
 block content
   .container.mt-3
     .row.header
-      .col-6.text-left
+      .col-8.text-left
         h4.date.text-secondary
           = date
         h2.date-title
           | Профиль
-      .col-6.text-right.user
+      .col-4.text-right.user
         a.btn.btn-outline-danger.rounded-pill(href='/logout', title='Выйти из аккаунта') Выйти
     hr
     .row.mt-5
-      .col-6
+      .col
         h3.text-center.title-light Учетная запись
         p
           b Имя: 
@@ -24,7 +24,7 @@ block content
           b Статус администратора: 
           = user.local.admin
       - if (user.local.admin)
-        .col-6
+        .col
           h3.text-center.title-light Сотрудники
           .users
             each item in users
@@ -34,4 +34,6 @@ block content
                   | 
                   | (
                   = item.local.email
-                  | )
+                  | ) 
+                  - if (user.local.email === item.local.email)
+                      b (Вы)

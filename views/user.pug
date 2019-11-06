@@ -3,17 +3,17 @@ extends layout.pug
 block content
   .container.mt-3
     .row.header
-      .col-6.text-left
+      .col-8.text-left
         h4.date.text-secondary
           = currentUser.local.email
         h2.date-title
           = currentUser.local.name
-      .col-6.text-right.user
-        a.btn.btn-outline-dark.rounded-pill(href=`mailto:${currentUser.local.email}`) 
-          | Написать сотруднику
+      .col-4.text-right.user
+        a.btn.btn-outline-dark.rounded-pill(href=`mailto:${currentUser.local.email}`, title='Написать сотруднику') 
+          i.far.fa-envelope
     hr
-    .row.mt-5
-      .col-6.mx-auto
+    .row.mt-3
+      .col-12.col-sm-10.col-md-8.col-lg-6.mx-auto
         .tasks
           - if (tasks.length === 0)
             p.text-center.text-secondary.font-weight-light
