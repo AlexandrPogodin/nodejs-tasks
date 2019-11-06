@@ -23,7 +23,7 @@ Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.<br />
-You will also see all requests in the console (if NODE_ENV=production).
+You will also see all requests in the console (if NODE_ENV = development).
 
 ### `npm run prod`
 
