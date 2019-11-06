@@ -9,8 +9,16 @@ block content
         h2.date-title
           = currentUser.local.name
       .col-4.text-right.user
-        a.btn.btn-outline-dark.rounded-pill(href=`mailto:${currentUser.local.email}`, title='Написать сотруднику') 
-          i.far.fa-envelope
+        - if (String(currentUser._id) === String(user._id))
+          a.btn.btn-outline-dark.rounded-circle(href='/profile', title=`Профиль: ${user.local.email}`) 
+            i.far.fa-user
+        - else
+          a.btn.btn-outline-dark.rounded-pill(href=`mailto:${currentUser.local.email}`, title='Написать сотруднику') 
+            i.far.fa-envelope
+          form(action="/profile",method="post")
+            input(type="hidden", name="userId", value=`${currentUser._id}`)
+            button.btn.btn-outline-danger.rounded-pill.ml-2(type='submit', title='Удалить сотрудника') 
+              i.fas.fa-trash
     hr
     .row.mt-3
       .col-12.col-sm-10.col-md-8.col-lg-6.mx-auto

@@ -155,3 +155,8 @@ body {
 .social-link:hover {
   color: #212121;
 }
+
+.del-user {
+  color: #f44336;
+  text-decoration: none !important;
+}

@@ -106,7 +106,20 @@ module.exports = function(app, passport) {
       return docs;
     });
     const date = getDate();
-    res.render('profile.pug', { user: req.user, users, date });
+    res.render('profile.pug', {
+      user: req.user,
+      users,
+      date,
+    });
+  });
+
+  app.post('/profile', isLoggedIn, isAdmin, function(req, res) {
+    const { userId } = req.body;
+    User.findByIdAndRemove(userId, function(err, doc) {
+      if (err) return console.log(err);
+      console.log('Удален пользователь ', doc);
+    });
+    res.redirect('/profile');
   });
 
   // logout

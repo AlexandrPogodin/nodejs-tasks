@@ -35,5 +35,5 @@ block content
                   | (
                   = item.local.email
                   | ) 
-                  - if (user.local.email === item.local.email)
+                  - if (String(item._id) === String(user._id))
                       b (Вы)
