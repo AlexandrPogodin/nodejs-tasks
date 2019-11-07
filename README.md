@@ -3,7 +3,8 @@
 [Node.js] Tasks app
 Graduation project
 
-![](https://i.imgur.com/41UQBas.png)
+![](https://i.imgur.com/UAugGfD.png)
+![](https://i.imgur.com/Yw3HU97.png)
 
 ## Configuration
 
