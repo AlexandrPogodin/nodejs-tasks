@@ -3,6 +3,9 @@ const Intl = require('intl');
 const Task = require('./models/task.js');
 const User = require('./models/user');
 
+// DONE - выдавать пользователю только невыполненные задачи;
+// FIXME - собирать статистику выполненых/невыполненных/просроченных заданий для каждого пользователя
+
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on
@@ -57,6 +60,7 @@ module.exports = function(app, passport) {
     const tasks = await Task.find(
       {
         doer: req.user._id,
+        done: false,
       },
       function(err, docs) {
         if (err) console.log(err);
@@ -105,7 +109,26 @@ module.exports = function(app, passport) {
       if (err) console.log(err);
       return docs;
     });
+    users.forEach(async item => {
+      const tasks = await Task.find(
+        {
+          doer: item._id,
+        },
+        function(err, docs) {
+          if (err) console.log(err);
+          return docs;
+        }
+      );
+      item.countOfTasks = tasks.length;
+      item.countOfDoneTasks = 0;
+      item.countOfExpiredTasks = 0;
+      tasks.forEach(task => {
+        if (task.done) item.countOfDoneTasks += 1;
+        if (!task.done && task.date < Date.now()) item.countOfExpiredTasks += 1;
+      });
+    });
     const date = getDate();
+    console.log(users);
     res.render('profile.pug', {
       user: req.user,
       users,
@@ -161,6 +184,7 @@ module.exports = function(app, passport) {
       objective: req.body.objective,
       description: req.body.description,
       doer: req.body.userId,
+      date: req.body.date,
     });
 
     task.save(function(err) {

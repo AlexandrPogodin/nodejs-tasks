@@ -19,12 +19,19 @@ block content
             p.text-center.text-secondary.font-weight-light
               | У вас нет заданий.
           - else
+            p.text-center.text-secondary.font-weight-light
+              | Кол-во заданий: 
+              =tasks.length
             each task in tasks
-              .task.shadow-sm.rounded(class= task.done ? "done" : undefined)
+              .task.shadow-sm.rounded(class= !task.done && task.date < Date.now() ? "expired" : undefined)
                 p.task-obj=task.objective
                 p.task-desc=task.description
                 p.task-date
-                  = `${task.createdAt.getDate()}/${task.createdAt.getMonth()}/${task.createdAt.getFullYear()}`
+                  = `${task.createdAt.getDate()}/${task.createdAt.getMonth()}/${task.createdAt.getFullYear()} ${task.createdAt.getHours()}:${task.createdAt.getMinutes()}`
+                  |  - 
+                  = `${task.date.getDate()}/${task.date.getMonth()}/${task.date.getFullYear()} ${task.date.getHours()}:${task.date.getMinutes()}`
+                - if (!task.done && task.date < Date.now()) 
+                  p.task-expired Задача просрочена!
                 .row
                   .col-6.text-left
                     form(action="/done",method="post")
