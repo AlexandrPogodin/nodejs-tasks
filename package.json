@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prod": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.js",
+    "serve": "nodemon server.js"
   },
   "repository": {
     "type": "git",
