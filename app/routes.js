@@ -4,7 +4,7 @@ const Task = require('./models/task.js');
 const User = require('./models/user');
 
 // DONE - выдавать пользователю только невыполненные задачи;
-// FIXME - собирать статистику выполненых/невыполненных/просроченных заданий для каждого пользователя
+// DONE - собирать статистику выполненых/невыполненных/просроченных заданий для каждого пользователя
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
@@ -103,32 +103,19 @@ module.exports = function(app, passport) {
     })
   );
 
+  // logout
+  app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+
   // profile
   app.get('/profile', isLoggedIn, async function(req, res) {
     const users = await User.find({}, function(err, docs) {
       if (err) console.log(err);
       return docs;
     });
-    users.forEach(async item => {
-      const tasks = await Task.find(
-        {
-          doer: item._id,
-        },
-        function(err, docs) {
-          if (err) console.log(err);
-          return docs;
-        }
-      );
-      item.countOfTasks = tasks.length;
-      item.countOfDoneTasks = 0;
-      item.countOfExpiredTasks = 0;
-      tasks.forEach(task => {
-        if (task.done) item.countOfDoneTasks += 1;
-        if (!task.done && task.date < Date.now()) item.countOfExpiredTasks += 1;
-      });
-    });
     const date = getDate();
-    console.log(users);
     res.render('profile.pug', {
       user: req.user,
       users,
@@ -143,12 +130,6 @@ module.exports = function(app, passport) {
       console.log('Удален пользователь ', doc);
     });
     res.redirect('/profile');
-  });
-
-  // logout
-  app.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
   });
 
   app.get('/profile/:userId', isLoggedIn, isAdmin, async function(req, res) {
@@ -170,11 +151,9 @@ module.exports = function(app, passport) {
         return docs;
       }
     );
-    const date = getDate();
     res.render('user.pug', {
       user: req.user,
       tasks,
-      date,
       currentUser: currentUser[0],
     });
   });
@@ -192,6 +171,42 @@ module.exports = function(app, passport) {
       console.log('Задача успешно добавлена. Задача: ', task);
     });
     res.redirect(`/profile/${req.params.userId}`);
+  });
+
+  app.get('/profile/:userId/statistics', isLoggedIn, isAdmin, async function(req, res) {
+    const tasks = await Task.find(
+      {
+        doer: req.params.userId,
+      },
+      function(err, docs) {
+        if (err) console.log(err);
+        return docs;
+      }
+    );
+    const currentUser = await User.find(
+      {
+        _id: req.params.userId,
+      },
+      function(err, docs) {
+        if (err) console.log(err);
+        return docs;
+      }
+    );
+    const userStatistics = {
+      countAllTasks: tasks.length,
+      countDoneTasks: 0,
+      countExpiredTasks: 0
+    }
+    tasks.forEach(task => {
+      if (task.done) userStatistics.countDoneTasks += 1
+      if (!task.done && task.date < Date.now()) userStatistics.countExpiredTasks += 1
+    })
+    res.render('user-statistics.pug', {
+      user: req.user,
+      tasks,
+      userStatistics,
+      currentUser: currentUser[0],
+    });
   });
 
   app.post('/done', isLoggedIn, async function(req, res) {

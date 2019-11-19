@@ -28,6 +28,8 @@ block content
               | У сотрудника нет заданий.
           - else
             p.text-center.text-secondary.font-weight-light
+              a.stats-link(href=`/profile/${currentUser._id}/statistics`) Статистика
+              br
               | Кол-во заданий: 
               =tasks.length
             each task in tasks
