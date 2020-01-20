@@ -1,5 +1,3 @@
-const mongoose = require('mongoose');
-const Intl = require('intl');
 const Task = require('./models/task.js');
 const User = require('./models/user');
 
@@ -66,7 +64,7 @@ module.exports = function(app, passport) {
         if (err) console.log(err);
         return docs;
       }
-    );
+    ).sort('-createdAt');
     const date = getDate();
     res.render('index.pug', { user: req.user, date, tasks });
   });
@@ -141,7 +139,7 @@ module.exports = function(app, passport) {
         if (err) console.log(err);
         return docs;
       }
-    );
+    ).sort('-createdAt');
     const currentUser = await User.find(
       {
         _id: req.params.userId,
@@ -173,7 +171,10 @@ module.exports = function(app, passport) {
     res.redirect(`/profile/${req.params.userId}`);
   });
 
-  app.get('/profile/:userId/statistics', isLoggedIn, isAdmin, async function(req, res) {
+  app.get('/profile/:userId/statistics', isLoggedIn, isAdmin, async function(
+    req,
+    res
+  ) {
     const tasks = await Task.find(
       {
         doer: req.params.userId,
@@ -195,12 +196,13 @@ module.exports = function(app, passport) {
     const userStatistics = {
       countAllTasks: tasks.length,
       countDoneTasks: 0,
-      countExpiredTasks: 0
-    }
+      countExpiredTasks: 0,
+    };
     tasks.forEach(task => {
-      if (task.done) userStatistics.countDoneTasks += 1
-      if (!task.done && task.date < Date.now()) userStatistics.countExpiredTasks += 1
-    })
+      if (task.done) userStatistics.countDoneTasks += 1;
+      if (!task.done && task.date < Date.now())
+        userStatistics.countExpiredTasks += 1;
+    });
     res.render('user-statistics.pug', {
       user: req.user,
       tasks,
