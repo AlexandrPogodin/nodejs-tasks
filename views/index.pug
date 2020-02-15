@@ -23,7 +23,7 @@ block content
               | Кол-во заданий: 
               =tasks.length
             each task in tasks
-              .task.shadow-sm.rounded(class= !task.done && task.date < Date.now() ? "expired" : undefined)
+              .task.rounded(class= !task.done && task.date < Date.now() ? "expired" : undefined)
                 p.task-obj=task.objective
                 p.task-desc=task.description
                 p.task-date
